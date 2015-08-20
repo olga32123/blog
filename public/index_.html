@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+	<div data-bind="ifnot: displayUser">
+		<input type="text" data-bind="value:email">
+		<input type="text" data-bind="value:password">
+		<button data-bind="click:login">button</button>
+
+
+
+		<div data-bind="visible: shouldShowMessage">
+	  		 пароль не верный
+		</div>
+	   
+	</div>
+	<div data-bind="if: displayUser">
+	   привет <span data-bind="text: username"></span>
+
+	   </div>
+</body>
+</html>
