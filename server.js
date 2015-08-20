@@ -51,6 +51,37 @@ app.post('/api/categories', function(req, res){
 
 
 
+var tags = [
+	{ id : 1, title : 'tag1'},
+	{ id : 2, title : 'tag2'},
+	{ id : 3, title : 'tag3'}
+]
+
+app.get('/api/tags', function(req, res){
+	res.json(tags)
+})
+
+
+app.delete('/api/tags/:id', function(req, res){
+	var id = parseInt(req.params.id);
+	_.remove(tags, function(p){
+		return p.id == id;
+	})
+	res.json(categories)
+})
+
+
+
+app.post('/api/tags', function(req, res){
+	var newPost = req.body;
+	newPost.id = (new Date()).getTime()
+	tags.push(newPost);
+	res.json(newPost)
+})
+
+
+
+
 
 var posts = [
 	{ id : 1, text : 'post1  Lorem ipsum dolor sit amet, consectetur adipisicing'},
