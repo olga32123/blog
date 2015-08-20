@@ -84,10 +84,10 @@ app.post('/api/tags', function(req, res){
 
 
 var posts = [
-	{ id : 1, text : 'post1  Lorem ipsum dolor sit amet, consectetur adipisicing'},
-	{ id : 2, text : 'post3  Lorem ipsum dolor sit amet, consectetur adipisicing'},
-	{ id : 3, text : 'post4   Lorem ipsum dolor sit amet, consectetur adipisicing'},
-	{ id : 4, text : 'post5  Lorem ipsum dolor sit amet, consectetur adipisicing'}
+	{ id : 1, text : 'post1  Lorem ipsum dolor sit amet, consectetur adipisicing', tags : []},
+	{ id : 2, text : 'post3  Lorem ipsum dolor sit amet, consectetur adipisicing', tags : ['tag1', 'tag3']},
+	{ id : 3, text : 'post4   Lorem ipsum dolor sit amet, consectetur adipisicing', tags : ['tag4']},
+	{ id : 4, text : 'post5  Lorem ipsum dolor sit amet, consectetur adipisicing', tags : []}
 ]
 
 app.get('/api/post', function(req, res){

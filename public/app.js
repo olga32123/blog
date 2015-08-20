@@ -141,6 +141,7 @@ var Layout = React.createClass({
 					  <Nav bsStyle='pills' stacked>
 						    <NavItem eventKey={1} href='#/categories'>Categories</NavItem>
 						    <NavItem eventKey={2} href='#/posts'>Posts</NavItem>
+						    <NavItem eventKey={3} href='#/tags'>Tags</NavItem>
 					  </Nav>
 				</Col>
 				<Col xs={10}>
@@ -154,15 +155,6 @@ var Layout = React.createClass({
 	
 })
 
-
-var obj = {
-
-	ttt : function(){
-		name = 'peta';
-
-	},
-	name : 'vasa'
-}
 
 var ToDos = React.createClass({
 	render : function(){
@@ -226,7 +218,64 @@ var ToDos = React.createClass({
 			this.setState(newState)
 		}
 })
-
+var Tags = React.createClass({
+	render : function(){
+		var newTag = this.state.tags.map(this.renderTag);
+		return <ListGroup>
+				{newTag}
+				<ListGroupItem>
+					<Input  valueLink={this.linkState('value')} type='text'  buttonAfter={<Button onClick={this.addTag}>add new tag</Button>} />	
+				</ListGroupItem>
+			</ListGroup>	
+	},
+	renderTag : function(tag, index){
+		return <ListGroupItem>
+			{tag.title}
+			<Button bsSize='xsmall' onClick={this.remove.bind(null, tag, index)} bsStyle='danger'>remove</Button>
+		</ListGroupItem>
+	},
+	mixins: [React.addons.LinkedStateMixin],
+	getInitialState : function(){
+		return{
+			tags : [],
+			value : ''
+		}
+	},
+		componentDidMount : function(){
+			$.get('/api/tags').then(function(json){
+			this.setState({
+				tags : json
+			})	
+		}.bind(this))
+	},
+	remove : function(tag, index){
+		$.ajax({
+			  url: '/api/tags/' + tag.id,
+		    type: 'DELETE'
+		}).then(function(){
+			var newState = React.addons.update(this.state, {
+				tags : {
+					$splice : [[index, 1]]
+				}
+			})
+			this.setState(newState)
+		}.bind(this))
+		
+	},
+	addTag : function(){
+		$.post('/api/tags', {title : this.state.value}).then(function(json){
+			var newState = React.addons.update(this.state, {
+				tags : {
+					$push : [json]
+				},
+				value : {
+					$set : ''
+				}
+			})
+			this.setState(newState)
+		}.bind(this))
+	},
+})
 var Categories = React.createClass({
 	render : function(){
 		
@@ -292,27 +341,58 @@ var AddPost = React.createClass({
 	getInitialState : function(){
 		return {
 			value : '',
-			error : false
+			error : false,
+			tags : [],
+			selectedTags : []
 		}
+
+	},
+	componentDidMount : function(){
+			$.get('/api/tags').then(function(json){
+			this.setState({
+				tags : json
+			})	
+		}.bind(this))
 	},
 	addPost : function(){
 		if(!this.state.value){
 			this.setState({
 				error : true
 			})
+
 			return
 		}
-		$.post('/api/post', {text : this.state.value}).then(function(json){
+		var newPost =  {text : this.state.value , tags : this.state.selectedTags };
+		$.ajax({
+			url : '/api/post',
+			type : 'POST',
+			contentType : 'application/json',
+			data : JSON.stringify(newPost)
+		}).then(function(json){
 			this.transitionTo('/posts')
 		}.bind(this))	
 	},
-
+ 	addTag : function(a, b){
+ 			var newState = React.addons.update(this.state, {
+				selectedTags : {
+					$push : [b.selected]
+				}
+			})
+			this.setState(newState)
+ 	},
 	render : function(){
+		var options = this.state.tags.map(function(tag){
+			return <option> {tag.title}</option>
+		})	
 		return <div>
 			<form>
 				<Input bsStyle={this.state.error ? 'error':null}  valueLink={this.linkState('value')} type='textarea' label='Text' placeholder='add new post' />
+				<Chosen onChange={this.addTag} width="200px" data-placeholder="Select..." multiple>
+					{options}
+ 			 	</Chosen>
     			<Button onClick={this.addPost}>add new post</Button>
 			</form>
+			 
 		</div>
 	}
 })
@@ -362,6 +442,7 @@ var PostList = React.createClass({
 		}
 		return <tr>
 			<td><a href={"#/posts/" + post.id}>{text}</a></td>
+			<td>{post.tags.join(',')}</td>
 			<td>
 				<ButtonToolbar>
 					<Button bsSize='xsmall' onClick={this.showText.bind(null, post)} bsStyle='info'>read more</Button>
@@ -377,6 +458,7 @@ var PostList = React.createClass({
 		    <thead>
 		      <tr>
 		        <th>Post</th>
+		        <th>Tags</th>
 		        <th></th>
 		      </tr>
 		    </thead>
@@ -412,6 +494,7 @@ var routes = (
 		<Route handler={Categories} path="categories" />
 		<Route handler={AddPost} path="add" />
 		<Route handler = {ToDos} path="todo"/>
+		<Route handler = {Tags} path="tags"/>
 	</Route>);
 
 

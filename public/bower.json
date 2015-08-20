@@ -13,6 +13,7 @@
   "dependencies": {
     "react-router": "~0.13.3",
     "react-bootstrap": "~0.24.5",
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "react-chosen": "~0.3.8"
   }
 }
