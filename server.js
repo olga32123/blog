@@ -2,6 +2,10 @@ var express = require('express');
 var app = express();
 app.use('/admin',express.static('public'));
 
+
+var ORM = require('./models/ORM');
+var config = require('./config.json');
+
 var _ = require('lodash');
 
 var bodyParser = require('body-parser')
@@ -21,33 +25,33 @@ app.post('/login', function (req, res) {
 	}
 });
 
-var categories = [
-	{ id : 1, title : 'category 1'},
-	{ id : 2, title : 'category 2'},
-	{ id : 3, title : 'category 3'}
-]
+// var categories = [
+// 	{ id : 1, title : 'category 1'},
+// 	{ id : 2, title : 'category 2'},
+// 	{ id : 3, title : 'category 3'}
+// ]
 
-app.get('/api/categories', function(req, res){
-	res.json(categories)
-})
-
-
-app.delete('/api/categories/:id', function(req, res){
-	var id = parseInt(req.params.id);
-	_.remove(categories, function(p){
-		return p.id == id;
-	})
-	res.json(categories)
-})
+// app.get('/api/categories', function(req, res){
+// 	res.json(categories)
+// })
 
 
+// app.delete('/api/categories/:id', function(req, res){
+// 	var id = parseInt(req.params.id);
+// 	_.remove(categories, function(p){
+// 		return p.id == id;
+// 	})
+// 	res.json(categories)
+// })
 
-app.post('/api/categories', function(req, res){
-	var newPost = req.body;
-	newPost.id = (new Date()).getTime()
-	categories.push(newPost);
-	res.json(newPost)
-})
+
+
+// app.post('/api/categories', function(req, res){
+// 	var newPost = req.body;
+// 	newPost.id = (new Date()).getTime()
+// 	categories.push(newPost);
+// 	res.json(newPost)
+// })
 
 
 
@@ -119,10 +123,14 @@ app.post('/api/post', function(req, res){
 	res.json(newPost)
 })
 
+ORM.init(app, function(e){
+	app.use('/api/categories', ORM.REST('category'))
 
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
+	var server = app.listen(3000, function () {
+  		var host = server.address().address;
+  		var port = server.address().port;
 
-  console.log('Example app listening at http://%s:%s', host, port);
-});
+  		console.log('Example app listening at http://%s:%s', host, port);
+	});
+})
+
