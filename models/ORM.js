@@ -24,8 +24,9 @@ var ormConfig = {
 
 var orm = new Waterline();
 
-//orm.loadCollection(require('./Post'));
+orm.loadCollection(require('./Post'));
 orm.loadCollection(require('./Category'));
+orm.loadCollection(require('./Tag'));
 
 
 var init =  function(app, done) {
