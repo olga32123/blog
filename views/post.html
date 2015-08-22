@@ -1,0 +1,12 @@
+<% extend 'layout.html' %>
+
+
+<a href="/">back<a/>
+<h1><%- @post.text %></h1>
+
+
+<p>Tags:</p>
+
+<% for p in @post.tags : %>
+	<span><%- p %> </span>
+<% end %>

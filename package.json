@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.3",
+    "ect": "^0.5.9",
     "express": "^4.13.3",
     "lodash": "^3.10.1",
     "sails-mysql": "^0.11.0",
