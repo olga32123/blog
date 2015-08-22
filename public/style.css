@@ -1,23 +1,9 @@
-a{
-	color: red;
-}
-.contact_button{
-	width: 200px;
-	height: 100px;
-	background-color: #ccc;
-	text-align: center;
-	margin: 200px;
-	cursor: pointer;
-}
-.addNewButton{
-	margin-top: 20px;
-	margin-bottom: 20px;
+body {
+	background: #ccc;
 }
 
-.todo {
-	cursor: pointer;
-}
-
-.todo--complted {
-	text-decoration: line-through;
+.container {
+	width: 960px;
+	margin: 0 auto;
+	background: #fff;
 }

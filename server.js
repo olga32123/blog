@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
-app.use('/admin',express.static('public'));
+
+//app.use('/admin',express.static('public'));
+app.use(express.static('public'));
 
 
 var ORM = require('./models/ORM');
@@ -18,13 +20,13 @@ var ectRenderer = ECT({ watch: true, root: __dirname + '/views' });
 app.engine('.html', ectRenderer.render);
 app.set('view engine', 'html');
 
-// app.post('/login', function (req, res) {
-// 	if (req.body.email == 'admin' && req.body.password == 'admin'){
-// 		res.json({ name : 'admin', email : 'admin@mail.com'})
-// 	} else {
-// 		 res.sendStatus(401);
-// 	}
-// });
+app.post('/login', function (req, res) {
+	if (req.body.email == 'admin' && req.body.password == 'admin'){
+		res.json({ name : 'admin', email : 'admin@mail.com'})
+	} else {
+		 res.sendStatus(401);
+	}
+});
 
 
 ORM.init(app, function(e){

@@ -1,3 +1,4 @@
 /node_modules/
-/public/bower_components/
+/public/admin/bower_components/
+/public/react/bower_components/
 config.json
